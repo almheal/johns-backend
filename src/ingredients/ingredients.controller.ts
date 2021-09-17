@@ -4,8 +4,9 @@ import {
   Get,
   Put,
   Delete,
-  Body,
   Param,
+  Query,
+  Body,
 } from '@nestjs/common';
 import { IngredientsService } from './ingredients.service';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -41,8 +42,8 @@ export class IngredientsController {
     type: CreateIngredientDto,
   })
   @Get()
-  async getAll(): Promise<Ingredient[]> {
-    return this.ingredientsService.getAll();
+  async getAll(@Query() query): Promise<Ingredient[]> {
+    return this.ingredientsService.getAll(query);
   }
 
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
