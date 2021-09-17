@@ -4,8 +4,9 @@ import {
   Get,
   Put,
   Delete,
-  Body,
   Param,
+  Query,
+  Body,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -41,8 +42,8 @@ export class ProductsController {
     type: CreateProductDto,
   })
   @Get()
-  async getAll(): Promise<Product[]> {
-    return this.productsService.getAll();
+  async getAll(@Query() query): Promise<Product[]> {
+    return this.productsService.getAll(query);
   }
 
   @ApiResponse({
