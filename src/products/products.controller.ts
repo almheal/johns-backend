@@ -11,7 +11,7 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './schemas/product.schema';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { ObjectId } from 'mongoose';
 import { ErrorMessageCode } from '../errors/error';
@@ -41,6 +41,8 @@ export class ProductsController {
     isArray: true,
     type: CreateProductDto,
   })
+  @ApiQuery({ name: 'skip', example: '1', required: false })
+  @ApiQuery({ name: 'limit', example: '1', required: false })
   @Get()
   async getAll(@Query() query): Promise<Product[]> {
     return this.productsService.getAll(query);

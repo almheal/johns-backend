@@ -13,7 +13,7 @@ import { LocalesService } from './locales.service';
 import { Locale } from './schemas/locales.schema';
 import { ObjectId } from 'mongoose';
 import { ValidationPipe } from '../pipes/validation.pipe';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ErrorMessageCode } from '../errors/error';
 
 @ApiTags('Locales')
@@ -41,6 +41,8 @@ export class LocalesController {
     isArray: true,
     type: CreateLocaleDto,
   })
+  @ApiQuery({ name: 'skip', example: '1', required: false })
+  @ApiQuery({ name: 'limit', example: '1', required: false })
   @Get()
   async getAll(@Query() query): Promise<Locale[]> {
     return this.localesService.getAll(query);

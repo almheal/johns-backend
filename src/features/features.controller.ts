@@ -8,7 +8,7 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FeaturesService } from './features.service';
 import { Feature } from './schemas/feature.schema';
 import { CreateFeatureDto } from './dto/create-feature.dto';
@@ -41,6 +41,8 @@ export class FeaturesController {
     isArray: true,
     type: CreateFeatureDto,
   })
+  @ApiQuery({ name: 'skip', example: '1', required: false })
+  @ApiQuery({ name: 'limit', example: '1', required: false })
   @Get()
   async getAll(@Query() query): Promise<Feature[]> {
     return this.featuresService.getAll(query);
