@@ -4,8 +4,9 @@ import {
   Get,
   Put,
   Delete,
-  Body,
   Param,
+  Query,
+  Body,
 } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { Tag } from './schemas/tag.schema';
@@ -39,8 +40,8 @@ export class TagsController {
     type: CreateTagDto,
   })
   @Get()
-  async getAll(): Promise<Tag[]> {
-    return this.tagsService.getAll();
+  async getAll(@Query() query): Promise<Tag[]> {
+    return this.tagsService.getAll(query);
   }
 
   @ApiResponse({
