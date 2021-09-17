@@ -4,8 +4,9 @@ import {
   Get,
   Put,
   Delete,
-  Body,
+  Query,
   Param,
+  Body,
 } from '@nestjs/common';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FeaturesService } from './features.service';
@@ -41,8 +42,8 @@ export class FeaturesController {
     type: CreateFeatureDto,
   })
   @Get()
-  async getAll(): Promise<Feature[]> {
-    return this.featuresService.getAll();
+  async getAll(@Query() query): Promise<Feature[]> {
+    return this.featuresService.getAll(query);
   }
 
   @ApiResponse({
