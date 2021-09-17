@@ -16,8 +16,8 @@ export class IngredientsService {
     return createdIngredient.save();
   }
 
-  async getAll(): Promise<Ingredient[]> {
-    return this.ingredientModel.find();
+  async getAll({ limit = 0, skip = 0 }): Promise<Ingredient[]> {
+    return this.ingredientModel.find().skip(Number(skip)).limit(Number(limit));
   }
 
   async get(id: string | ObjectId): Promise<Ingredient> {
