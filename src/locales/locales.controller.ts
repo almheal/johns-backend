@@ -4,6 +4,7 @@ import {
   Post,
   Delete,
   Param,
+  Query,
   Body,
   Put,
 } from '@nestjs/common';
@@ -41,8 +42,8 @@ export class LocalesController {
     type: CreateLocaleDto,
   })
   @Get()
-  async getAll(): Promise<Locale[]> {
-    return this.localesService.getAll();
+  async getAll(@Query() query): Promise<Locale[]> {
+    return this.localesService.getAll(query);
   }
 
   @ApiResponse({
