@@ -27,11 +27,8 @@ export class LocalesService {
     return updatedLocale;
   }
 
-  async getAll({ limit = 0, skip = 0, search = '' }): Promise<Locale[]> {
-    return this.localesModel
-      .find(search ? { title: { $regex: search, $options: 'i' } } : {})
-      .skip(Number(skip))
-      .limit(Number(limit));
+  async getAll({ limit = 0, skip = 0 }): Promise<Locale[]> {
+    return this.localesModel.find().skip(Number(skip)).limit(Number(limit));
   }
 
   async get(id: string | ObjectId): Promise<Locale> {
