@@ -9,7 +9,7 @@ import {
   Body,
 } from '@nestjs/common';
 import { IngredientsService } from './ingredients.service';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Ingredient } from './schemas/ingredient.schema';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { ObjectId } from 'mongoose';
@@ -41,6 +41,8 @@ export class IngredientsController {
     isArray: true,
     type: CreateIngredientDto,
   })
+  @ApiQuery({ name: 'skip', example: '1', required: false })
+  @ApiQuery({ name: 'limit', example: '1', required: false })
   @Get()
   async getAll(@Query() query): Promise<Ingredient[]> {
     return this.ingredientsService.getAll(query);

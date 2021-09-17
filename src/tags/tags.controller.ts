@@ -12,7 +12,7 @@ import { TagsService } from './tags.service';
 import { Tag } from './schemas/tag.schema';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { ObjectId } from 'mongoose';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ErrorMessageCode } from '../errors/error';
 import { ValidationPipe } from '../pipes/validation.pipe';
 
@@ -39,6 +39,8 @@ export class TagsController {
     isArray: true,
     type: CreateTagDto,
   })
+  @ApiQuery({ name: 'skip', example: '1', required: false })
+  @ApiQuery({ name: 'limit', example: '1', required: false })
   @Get()
   async getAll(@Query() query): Promise<Tag[]> {
     return this.tagsService.getAll(query);
