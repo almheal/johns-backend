@@ -54,6 +54,11 @@ export class ProductsController {
   })
   @ApiQuery({ name: 'skip', example: '1', required: false })
   @ApiQuery({ name: 'limit', example: '1', required: false })
+  @ApiQuery({
+    name: 'category',
+    example: '61368364fdbb50d36496ff60',
+    required: false,
+  })
   @Get()
   async getAll(@Query() query) {
     return this.productsService.getAll(query);
