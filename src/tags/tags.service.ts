@@ -13,8 +13,21 @@ export class TagsService {
     return createdTag.save();
   }
 
-  async getAll({ limit = 0, skip = 0 }): Promise<Tag[]> {
-    return this.tagModel.find().skip(Number(skip)).limit(Number(limit));
+  async getAll({ limit = 0, skip = 0, length = 'true' }) {
+    const tags = await this.tagModel
+      .find()
+      .skip(Number(skip))
+      .limit(Number(limit));
+
+    if (length === 'true') {
+      const count = await this.tagModel.countDocuments({});
+      return {
+        data: tags,
+        length: count,
+      };
+    } else {
+      return tags;
+    }
   }
 
   async get(id: string | ObjectId): Promise<Tag> {
