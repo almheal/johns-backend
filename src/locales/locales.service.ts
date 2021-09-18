@@ -27,8 +27,8 @@ export class LocalesService {
     return updatedLocale;
   }
 
-  async getAll(): Promise<Locale[]> {
-    return this.localesModel.find();
+  async getAll({ limit = 0, skip = 0 }): Promise<Locale[]> {
+    return this.localesModel.find().skip(Number(skip)).limit(Number(limit));
   }
 
   async get(id: string | ObjectId): Promise<Locale> {

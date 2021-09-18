@@ -1,10 +1,13 @@
 export const productOptionsApiExample = {
-  variety: '61368364fdbb50d36496ff60',
+  variety: 'traditional',
   img: 'http://localhost:5000/product/123.png',
   sizes: [
     {
-      size: '61368364fdbb50d36496ff60',
-      persons: '61368364fdbb50d36496ff60',
+      size: {
+        title: '23',
+        unit: 'cm',
+      },
+      persons: '1-2',
       price: '124',
       nutritionalValue: {
         proteins: '100',

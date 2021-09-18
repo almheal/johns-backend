@@ -15,7 +15,7 @@ export class ProductsService {
     return createdProduct.save();
   }
 
-  async getAll(): Promise<Product[]> {
+  async getAll({ limit = 0, skip = 0 }): Promise<Product[]> {
     return this.productModel
       .find()
       .populate('features')
@@ -48,7 +48,9 @@ export class ProductsService {
             model: 'NumberPersons',
           },
         },
-      });
+      })
+      .skip(Number(skip))
+      .limit(Number(limit));
   }
 
   async get(id: string | ObjectId): Promise<Product> {

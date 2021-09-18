@@ -17,13 +17,14 @@ import { ERRORS_MESSAGE_CODES } from '../../errors/errors-const';
 import { Category } from '../../categories/schemas/category.schema';
 
 export class CreateProductDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'pepperoni' })
   @IsNotEmpty({
     message: ERRORS_MESSAGE_CODES.PRODUCT_TITLE_EMPTY,
   })
   readonly title: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, example: 'super pepperoni' })
+  @Allow()
   readonly description: string;
 
   @ApiProperty({

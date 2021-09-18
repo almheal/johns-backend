@@ -1,53 +1,24 @@
-import { Size } from '../../sizes/schemas/size.schema';
 import { ApiProperty } from '@nestjs/swagger';
-import { Allow, IsMongoId, IsNotEmpty, ValidateIf } from 'class-validator';
-import { NumberPersons } from '../../number-persons/schemas/number-persons.schema';
+import { Allow, IsNotEmpty } from 'class-validator';
 import { ERRORS_MESSAGE_CODES } from '../../errors/errors-const';
-
-class NutritionalValue {
-  @ApiProperty({ required: false, example: '100' })
-  @Allow()
-  proteins: string;
-
-  @ApiProperty({ required: false, example: '100' })
-  @Allow()
-  fats: string;
-
-  @ApiProperty({ required: false, example: '100' })
-  @Allow()
-  carbohydrates: string;
-
-  @ApiProperty({ required: false, example: '100/200' })
-  @Allow()
-  energyValue: string;
-
-  @ApiProperty({ required: false, example: '100' })
-  @Allow()
-  weight: string;
-}
+import { SizeDto } from './size.dto';
+import { NutritionalValue } from './nitritional-value.dto';
 
 export class ProductSizeDto {
   @ApiProperty({
     required: false,
-    type: Size,
+    type: SizeDto,
     example: '61368364fdbb50d36496ff60',
   })
-  @ValidateIf((obj) => obj.size)
-  @IsMongoId({
-    message: ERRORS_MESSAGE_CODES.SIZE_IS_NOT_OBJECT_ID,
-  })
-  readonly size: Size;
+  @Allow()
+  readonly size: SizeDto;
 
   @ApiProperty({
     required: false,
-    type: NumberPersons,
-    example: '61368364fdbb50d36496ff60',
+    example: '1-2',
   })
-  @ValidateIf((obj) => obj.persons)
-  @IsMongoId({
-    message: ERRORS_MESSAGE_CODES.PERSONS_IS_NOT_OBJECT_ID,
-  })
-  readonly persons: NumberPersons;
+  @Allow()
+  readonly persons: string;
 
   @ApiProperty({ example: '124' })
   @IsNotEmpty({

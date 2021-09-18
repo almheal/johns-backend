@@ -15,8 +15,8 @@ export class FeaturesService {
     return createdFeature.save();
   }
 
-  async getAll(): Promise<Feature[]> {
-    return this.featureModel.find();
+  async getAll({ limit = 0, skip = 0 }): Promise<Feature[]> {
+    return this.featureModel.find().skip(Number(skip)).limit(Number(limit));
   }
 
   async get(id: string | ObjectId): Promise<Feature> {

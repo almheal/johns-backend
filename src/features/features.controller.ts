@@ -4,22 +4,28 @@ import {
   Get,
   Put,
   Delete,
-  Body,
+  Query,
   Param,
+  Body,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FeaturesService } from './features.service';
 import { Feature } from './schemas/feature.schema';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { ObjectId } from 'mongoose';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { ErrorMessageCode } from '../errors/error';
+import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
 
 @ApiTags('Features')
 @Controller('features')
 export class FeaturesController {
   constructor(private featuresService: FeaturesService) {}
 
+  // Create
   @ApiResponse({
     status: 200,
     type: CreateFeatureDto,
@@ -31,20 +37,28 @@ export class FeaturesController {
   @Post()
   async create(
     @Body(new ValidationPipe()) dto: CreateFeatureDto,
-  ): Promise<Feature> {
-    return this.featuresService.create(dto);
+    @Res() res: Response,
+  ) {
+    const data = await this.featuresService.create(dto);
+    res
+      .status(HttpStatus.CREATED)
+      .send({ data, message: [SUCCESS_MESSAGE_CODES.CREATED_FEATURE] });
   }
 
+  // Get all
   @ApiResponse({
     status: 200,
     isArray: true,
     type: CreateFeatureDto,
   })
+  @ApiQuery({ name: 'skip', example: '1', required: false })
+  @ApiQuery({ name: 'limit', example: '1', required: false })
   @Get()
-  async getAll(): Promise<Feature[]> {
-    return this.featuresService.getAll();
+  async getAll(@Query() query): Promise<Feature[]> {
+    return this.featuresService.getAll(query);
   }
 
+  // Get one
   @ApiResponse({
     status: 200,
     type: CreateFeatureDto,
@@ -59,6 +73,7 @@ export class FeaturesController {
     return this.featuresService.get(id);
   }
 
+  // Update
   @ApiResponse({
     status: 200,
     type: CreateFeatureDto,
@@ -72,10 +87,15 @@ export class FeaturesController {
   async update(
     @Param('id') id,
     @Body(new ValidationPipe()) dto: CreateFeatureDto,
-  ): Promise<Feature> {
-    return this.featuresService.update(id, dto);
+    @Res() res: Response,
+  ) {
+    const data = await this.featuresService.update(id, dto);
+    res
+      .status(HttpStatus.OK)
+      .send({ data, message: [SUCCESS_MESSAGE_CODES.UPDATED_FEATURE] });
   }
 
+  // Delete
   @ApiResponse({
     status: 200,
     type: CreateFeatureDto,
@@ -86,7 +106,10 @@ export class FeaturesController {
   })
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
   @Delete(':id')
-  async delete(@Param('id') id): Promise<Feature> {
-    return this.featuresService.delete(id);
+  async delete(@Param('id') id, @Res() res: Response) {
+    const data = await this.featuresService.delete(id);
+    res
+      .status(HttpStatus.OK)
+      .send({ data, message: [SUCCESS_MESSAGE_CODES.DELETED_FEATURE] });
   }
 }
