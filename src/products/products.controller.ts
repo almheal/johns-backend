@@ -55,7 +55,7 @@ export class ProductsController {
   @ApiQuery({ name: 'skip', example: '1', required: false })
   @ApiQuery({ name: 'limit', example: '1', required: false })
   @Get()
-  async getAll(@Query() query): Promise<Product[]> {
+  async getAll(@Query() query) {
     return this.productsService.getAll(query);
   }
 

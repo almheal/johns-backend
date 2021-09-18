@@ -15,42 +15,26 @@ export class ProductsService {
     return createdProduct.save();
   }
 
-  async getAll({ limit = 0, skip = 0 }): Promise<Product[]> {
-    return this.productModel
-      .find()
+  async getAll({ limit = 0, skip = 0, length = 'true', category }) {
+    const products = await this.productModel
+      .find(category ? { category: category } : {})
       .populate('features')
       .populate('tags')
       .populate('ingredients')
-      .populate('category')
-      .populate({
-        path: 'options',
-        populate: {
-          path: 'variety',
-          model: 'Variety',
-        },
-      })
-      .populate({
-        path: 'options',
-        populate: {
-          path: 'sizes',
-          populate: {
-            path: 'size',
-            model: 'Size',
-          },
-        },
-      })
-      .populate({
-        path: 'options',
-        populate: {
-          path: 'sizes',
-          populate: {
-            path: 'persons',
-            model: 'NumberPersons',
-          },
-        },
-      })
       .skip(Number(skip))
       .limit(Number(limit));
+
+    if (length === 'true') {
+      const count = await this.productModel.countDocuments(
+        category ? { category: category } : {},
+      );
+      return {
+        data: products,
+        length: count,
+      };
+    }
+
+    return products;
   }
 
   async get(id: string | ObjectId): Promise<Product> {

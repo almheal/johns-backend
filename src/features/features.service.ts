@@ -15,8 +15,18 @@ export class FeaturesService {
     return createdFeature.save();
   }
 
-  async getAll({ limit = 0, skip = 0 }): Promise<Feature[]> {
-    return this.featureModel.find().skip(Number(skip)).limit(Number(limit));
+  async getAll({ limit = 0, skip = 0, length = 'true' }) {
+    const features = await this.featureModel
+      .find()
+      .skip(Number(skip))
+      .limit(Number(limit));
+
+    if (length === 'true') {
+      const count = await this.featureModel.countDocuments({});
+      return { data: features, length: count };
+    } else {
+      return features;
+    }
   }
 
   async get(id: string | ObjectId): Promise<Feature> {
