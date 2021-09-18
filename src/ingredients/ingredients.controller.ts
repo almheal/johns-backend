@@ -7,7 +7,10 @@ import {
   Param,
   Query,
   Body,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { IngredientsService } from './ingredients.service';
 import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Ingredient } from './schemas/ingredient.schema';
@@ -15,12 +18,14 @@ import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { ObjectId } from 'mongoose';
 import { ErrorMessageCode } from '../errors/error';
 import { ValidationPipe } from '../pipes/validation.pipe';
+import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
 
 @ApiTags('Ingredients')
 @Controller('ingredients')
 export class IngredientsController {
   constructor(private ingredientsService: IngredientsService) {}
 
+  // Create
   @ApiResponse({
     status: 200,
     type: CreateIngredientDto,
@@ -32,10 +37,15 @@ export class IngredientsController {
   @Post()
   async create(
     @Body(new ValidationPipe()) dto: CreateIngredientDto,
-  ): Promise<Ingredient> {
-    return this.ingredientsService.create(dto);
+    @Res() res: Response,
+  ) {
+    const data = await this.ingredientsService.create(dto);
+    res
+      .status(HttpStatus.CREATED)
+      .send({ data, message: [SUCCESS_MESSAGE_CODES.CREATED_INGREDIENT] });
   }
 
+  // Get all
   @ApiResponse({
     status: 200,
     isArray: true,
@@ -48,6 +58,7 @@ export class IngredientsController {
     return this.ingredientsService.getAll(query);
   }
 
+  // Get one
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
   @ApiResponse({
     status: 200,
@@ -62,6 +73,7 @@ export class IngredientsController {
     return this.ingredientsService.get(id);
   }
 
+  // Update
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
   @ApiResponse({
     status: 200,
@@ -75,10 +87,15 @@ export class IngredientsController {
   async update(
     @Param('id') id: string | ObjectId,
     @Body(new ValidationPipe()) dto: CreateIngredientDto,
-  ): Promise<Ingredient> {
-    return this.ingredientsService.update(id, dto);
+    @Res() res: Response,
+  ) {
+    const data = await this.ingredientsService.update(id, dto);
+    res
+      .status(HttpStatus.OK)
+      .send({ data, message: [SUCCESS_MESSAGE_CODES.UPDATED_INGREDIENT] });
   }
 
+  // Delete
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
   @ApiResponse({
     status: 200,
@@ -89,7 +106,10 @@ export class IngredientsController {
     type: ErrorMessageCode,
   })
   @Delete(':id')
-  async delete(@Param('id') id: string | ObjectId): Promise<Ingredient> {
-    return this.ingredientsService.delete(id);
+  async delete(@Param('id') id: string | ObjectId, @Res() res: Response) {
+    const data = await this.ingredientsService.delete(id);
+    res
+      .status(HttpStatus.OK)
+      .send({ data, message: [SUCCESS_MESSAGE_CODES.DELETED_INGREDIENT] });
   }
 }
