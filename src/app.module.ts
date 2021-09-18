@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { VarietiesModule } from './varieties/varieties.module';
-import { NumberPersonsModule } from './number-persons/number-persons.module';
 import { ImagesModule } from './images/images.module';
 import { LocalesModule } from './locales/locales.module';
 import { LocaleMessagesModule } from './locale-messages/locale-messages.module';
@@ -13,7 +11,6 @@ import { CategoriesModule } from './categories/categories.module';
 import { TagsModule } from './tags/tags.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { FeaturesModule } from './features/features.module';
-import { SizesModule } from './sizes/sizes.module';
 import { ProductsModule } from './products/products.module';
 
 @Module({
@@ -23,8 +20,6 @@ import { ProductsModule } from './products/products.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGO_DB),
-    VarietiesModule,
-    NumberPersonsModule,
     ImagesModule,
     LocalesModule,
     LocaleMessagesModule,
@@ -35,7 +30,6 @@ import { ProductsModule } from './products/products.module';
     TagsModule,
     IngredientsModule,
     FeaturesModule,
-    SizesModule,
     ProductsModule,
   ],
   controllers: [],
