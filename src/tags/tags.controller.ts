@@ -55,7 +55,7 @@ export class TagsController {
   @ApiQuery({ name: 'skip', example: '1', required: false })
   @ApiQuery({ name: 'limit', example: '1', required: false })
   @Get()
-  async getAll(@Query() query): Promise<Tag[]> {
+  async getAll(@Query() query) {
     return this.tagsService.getAll(query);
   }
 

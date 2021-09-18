@@ -16,8 +16,21 @@ export class IngredientsService {
     return createdIngredient.save();
   }
 
-  async getAll({ limit = 0, skip = 0 }): Promise<Ingredient[]> {
-    return this.ingredientModel.find().skip(Number(skip)).limit(Number(limit));
+  async getAll({ limit = 0, skip = 0, length = 'true' }) {
+    const ingredients = await this.ingredientModel
+      .find()
+      .skip(Number(skip))
+      .limit(Number(limit));
+
+    if (length === 'true') {
+      const count = await this.ingredientModel.countDocuments({});
+      return {
+        data: ingredients,
+        length: count,
+      };
+    } else {
+      return ingredients;
+    }
   }
 
   async get(id: string | ObjectId): Promise<Ingredient> {

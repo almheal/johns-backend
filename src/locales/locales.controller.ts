@@ -55,7 +55,7 @@ export class LocalesController {
   @ApiQuery({ name: 'skip', example: '1', required: false })
   @ApiQuery({ name: 'limit', example: '1', required: false })
   @Get()
-  async getAll(@Query() query): Promise<Locale[]> {
+  async getAll(@Query() query) {
     return this.localesService.getAll(query);
   }
 

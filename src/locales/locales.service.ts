@@ -27,8 +27,21 @@ export class LocalesService {
     return updatedLocale;
   }
 
-  async getAll({ limit = 0, skip = 0 }): Promise<Locale[]> {
-    return this.localesModel.find().skip(Number(skip)).limit(Number(limit));
+  async getAll({ limit = 0, skip = 0, length = 'true' }) {
+    const locales = await this.localesModel
+      .find()
+      .skip(Number(skip))
+      .limit(Number(limit));
+
+    if (length === 'true') {
+      const count = await this.localesModel.countDocuments({});
+      return {
+        data: locales,
+        length: count,
+      };
+    } else {
+      return locales;
+    }
   }
 
   async get(id: string | ObjectId): Promise<Locale> {
