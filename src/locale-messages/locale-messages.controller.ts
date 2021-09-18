@@ -6,20 +6,24 @@ import {
   Put,
   Delete,
   Post,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { CreateLocaleMessagesDto } from './dto/create-locale-messages.dto';
 import { LocaleMessagesService } from './locale-messages.service';
 import { LocaleMessages } from './schemas/locale-messages.schema';
 import { ObjectId } from 'mongoose';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateTagDto } from '../tags/dto/create-tag.dto';
 import { ErrorMessageCode } from '../errors/error';
+import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
 
 @ApiTags('LocaleMessages')
 @Controller('locale-messages')
 export class LocaleMessagesController {
   constructor(private localeMessagesService: LocaleMessagesService) {}
 
+  // Create
   @ApiResponse({
     status: 201,
     type: CreateLocaleMessagesDto,
@@ -33,6 +37,7 @@ export class LocaleMessagesController {
     return this.localeMessagesService.create(dto);
   }
 
+  // Get all
   @ApiResponse({
     status: 200,
     isArray: true,
@@ -43,6 +48,7 @@ export class LocaleMessagesController {
     return this.localeMessagesService.getAll();
   }
 
+  // Get one
   @ApiResponse({
     status: 200,
     type: CreateLocaleMessagesDto,
@@ -57,6 +63,7 @@ export class LocaleMessagesController {
     return this.localeMessagesService.get(id);
   }
 
+  // Update
   @ApiResponse({
     status: 200,
     type: CreateLocaleMessagesDto,
@@ -70,10 +77,16 @@ export class LocaleMessagesController {
   async update(
     @Param('id') id: string | ObjectId,
     @Body() dto: CreateLocaleMessagesDto,
-  ): Promise<LocaleMessages> {
-    return this.localeMessagesService.update(id, dto);
+    @Res() res: Response,
+  ) {
+    const data = await this.localeMessagesService.update(id, dto);
+
+    res
+      .status(HttpStatus.OK)
+      .send({ data, message: [SUCCESS_MESSAGE_CODES.UPDATED_LOCALE_MESSAGES] });
   }
 
+  // Delete
   @ApiResponse({
     status: 200,
     type: CreateLocaleMessagesDto,
