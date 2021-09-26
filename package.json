@@ -30,7 +30,6 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.0.9",
     "bcrypt": "^5.0.1",
-    "buffer-to-stream": "^1.0.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "cloudinary": "^1.27.0",

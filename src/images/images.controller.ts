@@ -34,13 +34,13 @@ export class ImagesController {
       limits: { fileSize: 1024 * 1024 },
     }),
   )
-  uploadImage(@UploadedFile() file, @Res() res) {
-    console.log(file);
+  async uploadImage(@UploadedFile() file, @Res() res) {
     if (file) {
-      console.log(this.cloudinaryService.uploadImage(file));
-      res.send(
-        `${this.configService.get('FULL_PATH')}/images/${file.filename}`,
+      const cloudinaryFile = await this.cloudinaryService.uploadImage(
+        `./uploads/${file.filename}`,
       );
+
+      res.send(cloudinaryFile.url);
     } else {
       res.status(HttpStatus.BAD_REQUEST).send();
     }
