@@ -21,6 +21,7 @@ export class ProductsService {
       .populate('features')
       .populate('tags')
       .populate('ingredients')
+      .populate('category')
       .skip(Number(skip))
       .limit(Number(limit));
 
@@ -38,7 +39,12 @@ export class ProductsService {
   }
 
   async get(id: string | ObjectId): Promise<Product> {
-    return this.productModel.findById(id);
+    return this.productModel
+      .findById(id)
+      .populate('features')
+      .populate('tags')
+      .populate('ingredients')
+      .populate('category');
   }
 
   async update(id: string | ObjectId, dto: CreateProductDto): Promise<Product> {

@@ -18,7 +18,6 @@ export class ImagesHelper {
   }
 
   static fileFilter(req, file, cb) {
-    console.log(file);
     const mimeTypes = [
       'image/png',
       'image/jpeg',
