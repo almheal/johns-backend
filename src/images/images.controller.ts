@@ -13,11 +13,15 @@ import { diskStorage } from 'multer';
 import { ImagesHelper } from './images.helper';
 import { ApiTags } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @ApiTags('Images upload')
 @Controller('images')
 export class ImagesController {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private cloudinaryService: CloudinaryService,
+  ) {}
 
   @Post()
   @UseInterceptors(
@@ -31,7 +35,9 @@ export class ImagesController {
     }),
   )
   uploadImage(@UploadedFile() file, @Res() res) {
+    console.log(file);
     if (file) {
+      console.log(this.cloudinaryService.uploadImage(file));
       res.send(
         `${this.configService.get('FULL_PATH')}/images/${file.filename}`,
       );

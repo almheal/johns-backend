@@ -12,6 +12,7 @@ import { TagsModule } from './tags/tags.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { FeaturesModule } from './features/features.module';
 import { ProductsModule } from './products/products.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ProductsModule } from './products/products.module';
     IngredientsModule,
     FeaturesModule,
     ProductsModule,
+    CloudinaryModule,
   ],
   controllers: [],
   providers: [],
