@@ -20,4 +20,5 @@ export const SUCCESS_MESSAGE_CODES = {
   CREATED_TAG: '19',
   UPDATED_TAG: '20',
   DELETED_TAG: '21',
+  REGISTER_USER: '22',
 };
