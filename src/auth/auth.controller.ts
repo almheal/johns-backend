@@ -16,6 +16,8 @@ import { LoginAdminUserDto } from '../admin-user/dto/login-admin-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from './jwt-auth-guard';
 import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { LoginUserDto } from '../users/dto/login-user.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -48,5 +50,21 @@ export class AuthController {
   @Get('admin')
   async authAdminUser(@Req() req) {
     return this.authService.authAdminUser(req.user);
+  }
+
+  @Post('register')
+  async registrationUser(
+    @Body(new ValidationPipe()) dto: CreateUserDto,
+    @Res() res: Response,
+  ) {
+    await this.authService.registrationUser(dto);
+    res
+      .status(HttpStatus.CREATED)
+      .send({ message: [SUCCESS_MESSAGE_CODES.REGISTER_USER] });
+  }
+
+  @Post('login')
+  async loginUser(@Body(new ValidationPipe()) dto: LoginUserDto) {
+    return this.authService.loginUser(dto);
   }
 }

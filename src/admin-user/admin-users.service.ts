@@ -1,9 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AdminUser, AdminUserDocument } from './schemas/admin-user.schema';
+import { AdminUserDocument } from './schemas/admin-user.schema';
 import { CreateAdminUserDto } from './dto/create-admin-user.dto';
-import { LoginAdminUserDto } from './dto/login-admin-user.dto';
 
 @Injectable()
 export class AdminUsersService {

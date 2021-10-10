@@ -6,11 +6,15 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginAdminUserDto } from '../admin-user/dto/login-admin-user.dto';
 import { ConfigService } from '@nestjs/config';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UsersService } from '../users/users.service';
+import { LoginUserDto } from '../users/dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private adminUserService: AdminUsersService,
+    private userService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
@@ -56,6 +60,50 @@ export class AuthService {
     const adminUserObject = adminUser.toObject();
     delete adminUserObject.password;
     return adminUserObject;
+  }
+
+  async registrationUser(dto: CreateUserDto) {
+    const { email, phoneNumber, password } = dto;
+    const candidate = await this.userService.findByPhoneAndEmail({
+      email,
+      phoneNumber,
+    });
+
+    if (candidate) {
+      this.alreadyCreatedUserError();
+    }
+
+    const hashPassword = await bcrypt.hash(password, 12);
+    const user = {
+      ...dto,
+      password: hashPassword,
+    };
+    await this.userService.create(user);
+  }
+
+  async loginUser(dto: LoginUserDto) {
+    const { phoneNumber, password } = dto;
+    const user = await this.userService.findByPhoneAndEmail({ phoneNumber });
+
+    if (!user) {
+      this.incorrentDataError();
+    }
+
+    const passwordIsMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordIsMatch) {
+      this.incorrentDataError();
+    }
+
+    const userObject = user.toObject();
+    delete userObject.password;
+
+    const token = this.generateToken({ _id: user._id });
+
+    return {
+      user: userObject,
+      token,
+    };
   }
 
   private generateToken(data) {
