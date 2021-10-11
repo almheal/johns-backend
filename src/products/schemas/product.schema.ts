@@ -39,6 +39,9 @@ export class Product {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
   category: Category;
+
+  @Prop({ required: false, default: '' })
+  count: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

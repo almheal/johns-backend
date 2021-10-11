@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { ERRORS_MESSAGE_CODES } from '../../errors/errors-const';
 import { CONSTS } from '../../const/const';
-import { DeliveryAddressDto } from './delivery-address.dto';
+import { AddressDeliveryDto } from './address-delivery.dto';
 import { Type } from 'class-transformer';
 import { PaymentCardDto } from './payment-card.dto';
 import { NotificationDto } from './notification.dto';
@@ -49,9 +49,9 @@ export class CreateUserDto {
 
   @ValidateIf((obj) => obj.hasOwnProperty('deliveryAddresses'))
   @ValidateNested({ each: true })
-  @Type(() => DeliveryAddressDto)
+  @Type(() => AddressDeliveryDto)
   @IsArray()
-  deliveryAddresses: DeliveryAddressDto[];
+  deliveryAddresses: AddressDeliveryDto[];
 
   @ValidateIf((obj) => obj.hasOwnProperty('paymentCards'))
   @ValidateNested({ each: true })

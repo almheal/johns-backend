@@ -49,7 +49,7 @@ export class ValidationPipe implements PipeTransform<any> {
             return value;
           }
           if (value !== null && value !== '' && value !== undefined) {
-            return value;
+            return typeof value === 'boolean' ? true : value;
           }
         })
         .map(([key, value]) => [

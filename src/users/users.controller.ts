@@ -1,16 +1,9 @@
-import {
-  Controller,
-  Put,
-  Body,
-  Req,
-  UseGuards,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Put, Body, Req, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth-guard';
+import { ValidationPipe } from '../pipes/validation.pipe';
 
 @ApiTags('Users')
 @Controller('users')

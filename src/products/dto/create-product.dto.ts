@@ -3,6 +3,7 @@ import {
   ArrayNotEmpty,
   IsMongoId,
   IsNotEmpty,
+  IsString,
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
@@ -89,4 +90,8 @@ export class CreateProductDto {
     message: ERRORS_MESSAGE_CODES.PRODUCT_CATEGORY_IS_NOT_OBJECT_ID,
   })
   readonly category: Category;
+
+  @ValidateIf((obj) => obj.count)
+  @IsString()
+  readonly count: string;
 }

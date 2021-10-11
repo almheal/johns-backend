@@ -5,16 +5,16 @@ export class AddressDelivery {
   @Prop()
   address: string;
 
-  @Prop()
+  @Prop({ required: false, default: '' })
   apartment: string;
 
-  @Prop()
+  @Prop({ required: false, default: '' })
   floor: string;
 
-  @Prop()
+  @Prop({ required: false, default: '' })
   intercom: string;
 
-  @Prop()
+  @Prop({ required: false, default: '' })
   entrance: string;
 }
 
