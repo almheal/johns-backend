@@ -14,6 +14,7 @@ import { FeaturesModule } from './features/features.module';
 import { ProductsModule } from './products/products.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { OrdersModule } from './orders/orders.module';
+import { PromoCodesModule } from './promo-codes/promo-codes.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { OrdersModule } from './orders/orders.module';
     ProductsModule,
     CloudinaryModule,
     OrdersModule,
+    PromoCodesModule,
   ],
   controllers: [],
   providers: [],
