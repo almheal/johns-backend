@@ -9,6 +9,7 @@ import {
   Put,
   Res,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CreateLocaleDto } from './dto/create-locale.dto';
@@ -19,6 +20,8 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ErrorMessageCode } from '../errors/error';
 import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles-auth.decorator';
 
 @ApiTags('Locales')
 @Controller('locales')
@@ -34,6 +37,8 @@ export class LocalesController {
     status: 400,
     type: ErrorMessageCode,
   })
+  @Roles('admin', 'employee', 'developer')
+  @UseGuards(RolesGuard)
   @Post()
   async create(
     @Body(new ValidationPipe()) dto: CreateLocaleDto,
@@ -84,6 +89,8 @@ export class LocalesController {
     type: ErrorMessageCode,
   })
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
+  @Roles('admin', 'employee', 'developer')
+  @UseGuards(RolesGuard)
   @Put(':id')
   async update(
     @Param('id') id: string | ObjectId,
@@ -107,6 +114,8 @@ export class LocalesController {
     type: ErrorMessageCode,
   })
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
+  @Roles('admin', 'employee', 'developer')
+  @UseGuards(RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id: string | ObjectId, @Res() res: Response) {
     const data = await this.localesService.delete(id);
