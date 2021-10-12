@@ -3,14 +3,14 @@ import { IngredientsController } from './ingredients.controller';
 import { IngredientsService } from './ingredients.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { IngredientSchema } from './schemas/ingredient.schema';
-import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'Ingredient', schema: IngredientSchema },
     ]),
-    JwtModule.register({}),
+    AuthModule,
   ],
   controllers: [IngredientsController],
   providers: [IngredientsService],
