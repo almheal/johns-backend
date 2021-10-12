@@ -47,11 +47,16 @@ export class AuthService {
     }
     const userObject = user.toObject();
     delete userObject.password;
-    const token = this.generateToken({ _id: user._id, roles: user.roles });
+    const secret = this.configService.get<string>('SECRET_ADMIN_USER');
+
+    const accessToken = this.generateToken(
+      { _id: user._id, roles: user.roles },
+      secret,
+    );
 
     return {
       user: userObject,
-      token,
+      accessToken,
     };
   }
 
@@ -97,19 +102,18 @@ export class AuthService {
 
     const userObject = user.toObject();
     delete userObject.password;
+    const secret = this.configService.get<string>('SECRET_USER');
 
-    const token = this.generateToken({ _id: user._id });
+    const accessToken = this.generateToken({ _id: user._id }, secret);
 
     return {
       user: userObject,
-      token,
+      accessToken,
     };
   }
 
-  private generateToken(data) {
-    return this.jwtService.sign(data, {
-      secret: this.configService.get<string>('SECRET_USER'),
-    });
+  private generateToken(data: any, secret: string) {
+    return this.jwtService.sign(data, { secret, expiresIn: '3h' });
   }
 
   private alreadyCreatedUserError() {

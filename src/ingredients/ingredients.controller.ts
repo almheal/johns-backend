@@ -9,6 +9,7 @@ import {
   Body,
   Res,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { IngredientsService } from './ingredients.service';
@@ -19,6 +20,8 @@ import { ObjectId } from 'mongoose';
 import { ErrorMessageCode } from '../errors/error';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles-auth.decorator';
 
 @ApiTags('Ingredients')
 @Controller('ingredients')
@@ -34,6 +37,8 @@ export class IngredientsController {
     status: 400,
     type: ErrorMessageCode,
   })
+  @Roles('admin', 'employee')
+  @UseGuards(RolesGuard)
   @Post()
   async create(
     @Body(new ValidationPipe()) dto: CreateIngredientDto,
@@ -83,6 +88,8 @@ export class IngredientsController {
     status: 400,
     type: ErrorMessageCode,
   })
+  @Roles('admin', 'employee')
+  @UseGuards(RolesGuard)
   @Put(':id')
   async update(
     @Param('id') id: string | ObjectId,
@@ -105,6 +112,8 @@ export class IngredientsController {
     status: 400,
     type: ErrorMessageCode,
   })
+  @Roles('admin', 'employee')
+  @UseGuards(RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id: string | ObjectId, @Res() res: Response) {
     const data = await this.ingredientsService.delete(id);

@@ -18,6 +18,7 @@ import { JwtAuthGuard } from './jwt-auth-guard';
 import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
+import { JWT_USERS, Signs } from './jwt-sign';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -46,6 +47,7 @@ export class AuthController {
       .send({ ...data, message: [SUCCESS_MESSAGE_CODES.LOGIN_ADMIN_USER] });
   }
 
+  @Signs(JWT_USERS.ADMIN)
   @UseGuards(JwtAuthGuard)
   @Get('admin')
   async authAdminUser(@Req() req) {

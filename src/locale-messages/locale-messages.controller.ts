@@ -8,6 +8,7 @@ import {
   Post,
   Res,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CreateLocaleMessagesDto } from './dto/create-locale-messages.dto';
@@ -17,6 +18,8 @@ import { ObjectId } from 'mongoose';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ErrorMessageCode } from '../errors/error';
 import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles-auth.decorator';
 
 @ApiTags('LocaleMessages')
 @Controller('locale-messages')
@@ -32,6 +35,8 @@ export class LocaleMessagesController {
     status: 400,
     type: ErrorMessageCode,
   })
+  @Roles('admin', 'employee', 'developer')
+  @UseGuards(RolesGuard)
   @Post()
   async create(@Body() dto: CreateLocaleMessagesDto): Promise<LocaleMessages> {
     return this.localeMessagesService.create(dto);
@@ -73,6 +78,8 @@ export class LocaleMessagesController {
     type: ErrorMessageCode,
   })
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
+  @Roles('admin', 'employee', 'developer')
+  @UseGuards(RolesGuard)
   @Put(':id')
   async update(
     @Param('id') id: string | ObjectId,
@@ -96,6 +103,8 @@ export class LocaleMessagesController {
     type: ErrorMessageCode,
   })
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
+  @Roles('admin', 'employee', 'developer')
+  @UseGuards(RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id: string | ObjectId): Promise<LocaleMessages> {
     return this.localeMessagesService.delete(id);

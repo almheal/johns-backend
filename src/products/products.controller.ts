@@ -9,6 +9,7 @@ import {
   Body,
   Res,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ProductsService } from './products.service';
@@ -19,6 +20,8 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 import { ObjectId } from 'mongoose';
 import { ErrorMessageCode } from '../errors/error';
 import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles-auth.decorator';
 
 @ApiTags('Products')
 @Controller('products')
@@ -34,6 +37,8 @@ export class ProductsController {
     status: 400,
     type: ErrorMessageCode,
   })
+  @Roles('admin', 'employee')
+  @UseGuards(RolesGuard)
   @Post()
   async create(
     @Body(new ValidationPipe()) dto: CreateProductDto,
@@ -89,6 +94,8 @@ export class ProductsController {
     type: ErrorMessageCode,
   })
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
+  @Roles('admin', 'employee')
+  @UseGuards(RolesGuard)
   @Put(':id')
   async update(
     @Param('id') id: string | ObjectId,
@@ -112,6 +119,8 @@ export class ProductsController {
     type: ErrorMessageCode,
   })
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
+  @Roles('admin', 'employee')
+  @UseGuards(RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id: string | ObjectId, @Res() res: Response) {
     const data = await this.productsService.delete(id);
