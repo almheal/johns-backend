@@ -4,14 +4,14 @@ import { AuthController } from './auth.controller';
 import { AdminUsersModule } from '../admin-user/admin-users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
     AdminUsersModule,
+    UsersModule,
     ConfigModule,
-    JwtModule.register({
-      signOptions: { expiresIn: '2h' },
-    }),
+    JwtModule.register({}),
   ],
   controllers: [AuthController],
   providers: [AuthService],

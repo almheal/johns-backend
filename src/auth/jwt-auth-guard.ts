@@ -6,13 +6,16 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
 import { ERRORS_MESSAGE_CODES } from '../errors/errors-const';
+import { JWT_SIGN, JWT_USERS } from './jwt-sign';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
+    private reflector: Reflector,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
@@ -20,7 +23,13 @@ export class JwtAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    const signUser = this.reflector.getAllAndOverride<string>(JWT_SIGN, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
     const req = context.switchToHttp().getRequest();
+
     try {
       const authHeader = req.headers.authorization;
       const bearer = authHeader.split(' ')[0];
@@ -37,8 +46,12 @@ export class JwtAuthGuard implements CanActivate {
         );
       }
 
+      const secretName =
+        signUser === JWT_USERS.ADMIN ? 'SECRET_ADMIN_USER' : 'SECRET_USER';
+      const secret = this.configService.get<string>(secretName);
+
       const user = this.jwtService.verify(token, {
-        secret: this.configService.get<string>('SECRET_USER'),
+        secret,
       });
       req.user = user;
       return true;

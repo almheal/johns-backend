@@ -9,6 +9,7 @@ import {
   Body,
   Res,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -19,6 +20,8 @@ import { ObjectId } from 'mongoose';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { ErrorMessageCode } from '../errors/error';
 import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles-auth.decorator';
 
 @ApiTags('Features')
 @Controller('features')
@@ -34,6 +37,8 @@ export class FeaturesController {
     status: 400,
     type: ErrorMessageCode,
   })
+  @Roles('admin', 'employee')
+  @UseGuards(RolesGuard)
   @Post()
   async create(
     @Body(new ValidationPipe()) dto: CreateFeatureDto,
@@ -83,6 +88,8 @@ export class FeaturesController {
     type: ErrorMessageCode,
   })
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
+  @Roles('admin', 'employee')
+  @UseGuards(RolesGuard)
   @Put(':id')
   async update(
     @Param('id') id,
@@ -105,6 +112,8 @@ export class FeaturesController {
     type: ErrorMessageCode,
   })
   @ApiParam({ name: 'id', example: '61368364fdbb50d36496ff60' })
+  @Roles('admin', 'employee')
+  @UseGuards(RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id, @Res() res: Response) {
     const data = await this.featuresService.delete(id);
