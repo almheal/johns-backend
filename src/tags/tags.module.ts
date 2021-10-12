@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { TagsController } from './tags.controller';
 import { TagsService } from './tags.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JwtModule } from '@nestjs/jwt';
 import { TagSchema } from './schemas/tag.schema';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Tag', schema: TagSchema }]),
-    JwtModule.register({}),
+    AuthModule,
   ],
   controllers: [TagsController],
   providers: [TagsService],

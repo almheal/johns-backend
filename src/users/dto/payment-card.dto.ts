@@ -1,5 +1,5 @@
 import { IsNotEmpty, Length } from 'class-validator';
-import { ERRORS_MESSAGE_CODES } from 'src/errors/errors-const';
+import { ERRORS_MESSAGE_CODES } from '../../errors/errors-const';
 
 export class PaymentCardDto {
   @IsNotEmpty({
