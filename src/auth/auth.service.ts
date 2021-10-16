@@ -6,9 +6,10 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginAdminUserDto } from '../admin-user/dto/login-admin-user.dto';
 import { ConfigService } from '@nestjs/config';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { LoginUserDto } from '../users/dto/login-user.dto';
+import { CheckRegisterUserDto } from '../users/dto/check-register-user.dto';
+import { CreateUserWithPasswordDto } from '../users/dto/user-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -67,7 +68,7 @@ export class AuthService {
     return adminUserObject;
   }
 
-  async registrationUser(dto: CreateUserDto) {
+  async registrationUser(dto: CreateUserWithPasswordDto) {
     const { email, phoneNumber, password } = dto;
     const candidate = await this.userService.findByPhoneAndEmail({
       email,
@@ -110,6 +111,11 @@ export class AuthService {
       user: userObject,
       accessToken,
     };
+  }
+
+  async checkRegisterUser(dto: CheckRegisterUserDto) {
+    const user = await this.userService.findByPhoneAndEmail(dto);
+    return Boolean(user);
   }
 
   private generateToken(data: any, secret: string) {

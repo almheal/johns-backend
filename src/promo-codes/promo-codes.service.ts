@@ -19,12 +19,39 @@ export class PromoCodesService {
     return createdPromoCode.save();
   }
 
-  async getAll({ id, code }) {
-    console.log('id', id, 'code', code);
+  async getAll({
+    id,
+    code,
+    skip = 0,
+    limit = 0,
+    length = 'true',
+  }: {
+    id: string | ObjectId;
+    code: string;
+    skip?: number | string;
+    limit?: number | string;
+    length?: string;
+  }) {
     if (id || code) {
       return this.get({ id, code });
     }
-    return this.promoCodeModel.find({});
+
+    const promoCodes = await this.promoCodeModel
+      .find({})
+      .populate('products')
+      .populate('categories')
+      .skip(Number(skip))
+      .limit(Number(limit));
+
+    if (length === 'true') {
+      const count = await this.promoCodeModel.countDocuments();
+      return {
+        data: promoCodes,
+        length: count,
+      };
+    }
+
+    return promoCodes;
   }
 
   async get({
@@ -35,10 +62,16 @@ export class PromoCodesService {
     code?: string;
   }): Promise<PromoCode> {
     if (id) {
-      return this.promoCodeModel.findById(id);
+      return this.promoCodeModel
+        .findById(id)
+        .populate('products')
+        .populate('categories');
     }
     if (code) {
-      return this.promoCodeModel.findOne({ code });
+      return this.promoCodeModel
+        .findOne({ code })
+        .populate('products')
+        .populate('categories');
     }
   }
 
@@ -50,11 +83,17 @@ export class PromoCodesService {
     if (candidate && !candidate._id.equals(dto._id)) {
       this.errorAlreadyExists();
     }
-    return this.promoCodeModel.findByIdAndUpdate(id, dto, { new: true });
+    return this.promoCodeModel
+      .findByIdAndUpdate(id, dto, { new: true })
+      .populate('products')
+      .populate('categories');
   }
 
   async delete(id: string | ObjectId): Promise<PromoCode> {
-    return this.promoCodeModel.findByIdAndDelete(id);
+    return this.promoCodeModel
+      .findByIdAndDelete(id)
+      .populate('products')
+      .populate('categories');
   }
 
   private errorAlreadyExists() {

@@ -23,8 +23,14 @@ export class User extends Document {
   @Prop()
   password: string;
 
+  @Prop({ required: false, default: '' })
+  img: string;
+
   @Prop({ required: false })
   dateOfBirth: string;
+
+  @Prop({ required: false, default: '' })
+  gender: string;
 
   @Prop([{ type: AddressDeliverySchema, required: false, default: [] }])
   deliveryAddresses: AddressDelivery[];
