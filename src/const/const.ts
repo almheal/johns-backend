@@ -8,6 +8,8 @@ export const CONSTS = {
   ORDER_PAYMENT_CASH: 'cash',
   ORDER_PAYMENT_CARD_TO_COURIER: 'cardToCourier',
   ORDER_PAYMENT_GOOGLE_PAY: 'googlePay',
+  GENDER_MALE: 'male',
+  GENDER_FEMALE: 'female',
 };
 
 export const CLOUDINARY = 'Cloudinary';
