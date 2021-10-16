@@ -16,9 +16,10 @@ import { LoginAdminUserDto } from '../admin-user/dto/login-admin-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from './jwt-auth-guard';
 import { SUCCESS_MESSAGE_CODES } from '../const/success-const';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { JWT_USERS, Signs } from './jwt-sign';
+import { CheckRegisterUserDto } from '../users/dto/check-register-user.dto';
+import { CreateUserWithPasswordDto } from '../users/dto/user-password.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -33,7 +34,7 @@ export class AuthController {
     await this.authService.registrationAdminUser(dto);
     res
       .status(HttpStatus.CREATED)
-      .send({ message: [SUCCESS_MESSAGE_CODES.REGISTER_ADMIN_USER] });
+      .send({ message: [SUCCESS_MESSAGE_CODES.REGISTER_USER] });
   }
 
   @Post('admin/login')
@@ -56,7 +57,7 @@ export class AuthController {
 
   @Post('register')
   async registrationUser(
-    @Body(new ValidationPipe()) dto: CreateUserDto,
+    @Body(new ValidationPipe()) dto: CreateUserWithPasswordDto,
     @Res() res: Response,
   ) {
     await this.authService.registrationUser(dto);
@@ -68,5 +69,12 @@ export class AuthController {
   @Post('login')
   async loginUser(@Body(new ValidationPipe()) dto: LoginUserDto) {
     return this.authService.loginUser(dto);
+  }
+
+  @Post('check')
+  async checkAlreadyUser(
+    @Body(new ValidationPipe()) dto: CheckRegisterUserDto,
+  ) {
+    return this.authService.checkRegisterUser(dto);
   }
 }

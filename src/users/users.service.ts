@@ -10,18 +10,18 @@ export class UsersService {
 
   async create(dto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(dto);
-    return await createdUser.save();
+    const user = await createdUser.save();
+    return this.removePassword(user);
   }
 
   async get(id: string | ObjectId): Promise<User> {
-    return this.userModel.findById(id);
+    const user = await this.userModel.findById(id);
+    return this.removePassword(user);
   }
 
   async update(id: string | ObjectId, dto: CreateUserDto) {
     const user = await this.userModel.findByIdAndUpdate(id, dto, { new: true });
-    const userObject = user.toObject();
-    delete userObject.password;
-    return userObject;
+    return this.removePassword(user);
   }
 
   async findByPhoneAndEmail({
@@ -34,5 +34,11 @@ export class UsersService {
     return this.userModel.findOne({
       $or: [{ email }, { phoneNumber }],
     });
+  }
+
+  private removePassword(doc) {
+    const object = doc.toObject();
+    delete object.password;
+    return object;
   }
 }
