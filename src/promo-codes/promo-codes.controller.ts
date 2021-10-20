@@ -37,6 +37,11 @@ export class PromoCodesController {
       .send({ data, message: [SUCCESS_MESSAGE_CODES.CREATED_PROMO_CODE] });
   }
 
+  @Get(':code')
+  async get(@Param('code') code: string) {
+    return this.promoCodesService.get({ code });
+  }
+
   @Roles('admin', 'employee')
   @UseGuards(RolesGuard)
   @Get()
