@@ -30,6 +30,7 @@ export class LocalesService {
   async getAll({ limit = 0, skip = 0, length = 'true' }) {
     const locales = await this.localesModel
       .find()
+      .populate('messages')
       .skip(Number(skip))
       .limit(Number(limit));
 
@@ -45,7 +46,7 @@ export class LocalesService {
   }
 
   async get(id: string | ObjectId): Promise<Locale> {
-    return this.localesModel.findById(id);
+    return this.localesModel.findById(id).populate('messages');
   }
 
   async update(id: string | ObjectId, dto: CreateLocaleDto): Promise<Locale> {
